@@ -540,7 +540,8 @@
     .nav-wa .chip { background: transparent; color: var(--black); }
     .nav-wa .chip svg { width: 22px; height: 22px; }
   }
-  @media (max-width: 370px) { .nav-tools .nav-wa { display: none; } }
+  @media (max-width: 370px) { .nav-tools .nav-wa { display: none; } .btn.send { padding-inline-start: 18px; font-size: 1rem; gap: 8px; } .btn.send .chip { width: 44px; height: 44px; } }
+  html:not(.js) .menu-btn { display: none; }
   @media (max-width: 1000px) and (min-width: 861px) { .end-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -1084,7 +1085,7 @@
     var vh = window.innerHeight;
     navEl.classList.toggle('solid', window.scrollY > 30 || (!!view && view !== 'home'));
     if (words.length) {
-      var r = st.getBoundingClientRect(), p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.25), 0, 1), lit = Math.round(p * words.length);
+      var r = st.getBoundingClientRect(), p = clamp((vh * 0.85 - r.top) / (r.height + vh * 0.25), 0, 1), lit = view && view !== 'home' ? words.length : Math.round(p * words.length);
       for (var i = 0; i < words.length; i++) words[i].classList.toggle('lit', i < lit);
     }
     if (!reduce) {
@@ -1179,6 +1180,7 @@
     root.classList.toggle('menu-open', open);
     menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     menu.inert = !open;
+    $$('header.hero, .band, main, footer').forEach(function (el) { el.inert = open; });   /* keyboard stays inside the open menu */
     root.style.overflow = open ? 'hidden' : '';
   }
   menuBtn.addEventListener('click', function () { setMenu(!root.classList.contains('menu-open')); });
